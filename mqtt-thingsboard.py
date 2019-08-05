@@ -10,6 +10,22 @@ import paho.mqtt.client as mqtt
 import json
 import serial
 
+def parseSensor(sensorData):
+    print("Received a continuous SDS011 packet")
+    if compareCheckSum(sensorData[2:9]):
+        print(sensorData[2:4], 'and', sensorData[4:6])
+        PM2_5 = ( ord(sensorData[3]) * 256 + ord(sensorData[2]) )
+        PM10 = ( ord(sensorData[5]) * 256 + ord(sensorData[4]) )
+        return (PM2_5, PM10)
+
+def compareCheckSum(sensorData):
+    checkSum = 0
+    for x in range(0, len(sensorData)-1):
+        checkSum = checkSum + ord(sensorData[x])
+    checkSum = checkSum & 255
+    return (checkSum == ord(sensorData[-1]))
+
+
 THINGSBOARD_HOST = '35.202.142.241'
 ACCESS_TOKEN = 'zWXZswSVxPtZPCCgfwch'
 
@@ -44,18 +60,3 @@ except KeyboardInterrupt:
 
 client.loop_stop()
 client.disconnect()
-
-def parseSensor(sensorData):
-    print("Received a continuous SDS011 packet")
-    if compareCheckSum(sensorData[2:9]):
-        print(sensorData[2:4], 'and', sensorData[4:6])
-        PM2_5 = ( ord(sensorData[3]) * 256 + ord(sensorData[2]) )
-        PM10 = ( ord(sensorData[5]) * 256 + ord(sensorData[4]) )
-        return (PM2_5, PM10)
-
-def compareCheckSum(sensorData):
-    checkSum = 0
-    for x in range(0, len(sensorData)-1):
-        checkSum = checkSum + ord(sensorData[x])
-    checkSum = checkSum & 255
-    return (checkSum == ord(sensorData[-1]))

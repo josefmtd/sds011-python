@@ -9,7 +9,7 @@ def parseSensor(sensorData):
         PM2_5 = ( ord(sensorData[3]) * 256 + ord(sensorData[2]) )
         PM10 = ( ord(sensorData[5]) * 256 + ord(sensorData[4]) )
         return (PM2_5, PM10)
-    
+
 def compareCheckSum(sensorData):
     checkSum = 0
     for x in range(0, len(sensorData)-1):
