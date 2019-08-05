@@ -21,9 +21,9 @@ def parseSensor(sensorData):
 def compareCheckSum(sensorData):
     checkSum = 0
     for x in range(0, len(sensorData)-1):
-        checkSum = checkSum + ord(sensorData[x])
+        checkSum = checkSum + sensorData[x]
     checkSum = checkSum & 255
-    return (checkSum == ord(sensorData[-1]))
+    return (checkSum == sensorData[-1])
 
 
 THINGSBOARD_HOST = '35.202.142.241'
