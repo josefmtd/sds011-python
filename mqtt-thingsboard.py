@@ -11,11 +11,11 @@ import json
 import serial
 
 def parseSensor(sensorData):
-    print("Received a continuous SDS011 packet")
     if compareCheckSum(sensorData[2:9]):
-        print(sensorData[2:4], 'and', sensorData[4:6])
-        PM2_5 = ( ord(sensorData[3]) * 256 + ord(sensorData[2]) )
-        PM10 = ( ord(sensorData[5]) * 256 + ord(sensorData[4]) )
+        PM2_5 = sensorData[3] * 256 + sensorData[2]
+        PM10 = sensorData[5] * 256 + sensorData[4]
+        PM10 = float(PM10)/10
+        PM2_5 = float(PM2_5)/10
         return (PM2_5, PM10)
 
 def compareCheckSum(sensorData):
@@ -46,9 +46,7 @@ client.loop_start()
 
 try:
     while True:
-        PM25, PM10 = parseSensor(sds011.read(10))
-        sensorData['pm2.5'] = float(pm25)/10
-        sensorData['pm10'] = float(pm10)/10
+        sensorData['pm2.5'], sensorData['pm10'] = parseSensor(sds011.read(10))
         sensorData['temperature'] = bme280.temperature
         sensorData['humidity'] = bme280.humidity
         sensorData['pressure'] = bme280.pressure
