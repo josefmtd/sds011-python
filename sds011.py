@@ -5,8 +5,8 @@ import serial
 def parseSensor(sensorData):
     print("Received a continuous SDS011 packet")
     if compareCheckSum(sensorData[2:9]):
-        PM2_5 = ((ord(sensorData[2]) << 8 + ord(sensorData[3])))/10
-        PM10 = ((ord(sensorData[4]) << 8 + ord(sensorData[5])))/10
+        PM2_5 = ((ord(sensorData[3]) << 8 + ord(sensorData[2])))/10
+        PM10 = ((ord(sensorData[5]) << 8 + ord(sensorData[4])))/10
         return (PM2_5, PM10)
     
 def compareCheckSum(sensorData):
