@@ -4,8 +4,8 @@ import serial
 
 def parseSensor(sensorData):
     if compareCheckSum(sensorData[2:9]):
-        PM2_5 = ( ord(sensorData[3]) * 256 + ord(sensorData[2]) )
-        PM10 = ( ord(sensorData[5]) * 256 + ord(sensorData[4]) )
+        PM2_5 = sensorData[3] * 256 + sensorData[2]
+        PM10 = sensorData[5] * 256 + sensorData[4]
         PM2_5 = float(PM2_5)/10
         PM10 = float(PM10)/10
         return (PM2_5, PM10)
@@ -13,9 +13,9 @@ def parseSensor(sensorData):
 def compareCheckSum(sensorData):
     checkSum = 0
     for x in range(0, len(sensorData)-1):
-        checkSum = checkSum + ord(sensorData[x])
+        checkSum = checkSum + sensorData[x]
     checkSum = checkSum & 255
-    return (checkSum == ord(sensorData[-1]))
+    return (checkSum == sensorData[-1])
 
 def main():
     sds011 = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
